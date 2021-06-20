@@ -1,7 +1,8 @@
-import Levenshtein20 as LS
-from GUI import Ui_MainWindow
+import src.logic.Levenshtein20 as LS
 import sys
 import os
+
+from src.qt.GUI import Ui_MainWindow
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from datetime import datetime
 
@@ -10,8 +11,8 @@ app = QApplication(sys.argv)
 window = QMainWindow()
 ui = Ui_MainWindow()
 # creating files to save the results
-filePro = open(os.curdir + "/protocols/protocol_" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
-fileRes = open(os.curdir + "/results/result" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
+filePro = open(os.curdir + "/data/protocols/protocol_" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
+fileRes = open(os.curdir + "/data/results/result" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
 
 # benötigt target und output
 def pushSUB():

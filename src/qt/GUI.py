@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'Pl20_design.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
-#
+#certifi==2021.5.30
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
