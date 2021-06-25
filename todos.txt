@@ -31,6 +31,7 @@
 Vorschläge für Erweiterungen:
 -Ping-Methode um Server-Load zu checken
 -Worker-Threads implementieren fürs logging/performance
+-one/two column Unterscheidung auch für text-input?
 -evtl numpy für mehr performance?
 -software tests schreiben um sicher zu gehen, dass alles wie erwartet funktioniert
 -Für korpus-internen Vergleich muss target auch befüllt sein, !NONE! oder so

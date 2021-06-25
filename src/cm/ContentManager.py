@@ -6,10 +6,10 @@ from PyQt5 import QtCore
 from datetime import datetime
 
 from src.cm.config import Config # pylint: disable=import-error
-from src.logic.words import WordObject # pylint: disable=import-error
+from src.logic.WordObject import WordObject # pylint: disable=import-error
 from src.logic.PLD20 import PLD20 # pylint: disable=import-error
 from src.logic.BASConnector import BASConnector # pylint: disable=import-error
-from src.cqt.GUI_GENERATED import Ui_MainWindow # pylint: disable=import-error
+from src.cqt.GUI import Ui_MainWindow # pylint: disable=import-error
 
 class ContentManager:
     def __init__(self):
