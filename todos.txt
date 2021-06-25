@@ -20,9 +20,8 @@
 -orthogrphaisch in output -> DONE
 -aufgabentrennung durch OOP -> DONE
 -keine temp.txt mehr -> DONE
--andere Buttons anpassen
--evtl numpy für mehr performance?
--config.txt um ordner zu laden
+-andere Buttons implementieren
+-config über config.txt um ordner zu laden
 -corpora in ordner zu beginn laden
 -mehrsprachigkeit in config
 -orthographische repr in config?
@@ -31,6 +30,7 @@
 ----------------------------------------
 Vorschläge für Erweiterungen:
 -Ping-Methode um Server-Load zu checken
--Worker-Threads implementieren fürs logging/performance 
+-Worker-Threads implementieren fürs logging/performance
+-evtl numpy für mehr performance?
 -software tests schreiben um sicher zu gehen, dass alles wie erwartet funktioniert
 -Für korpus-internen Vergleich muss target auch befüllt sein, !NONE! oder so

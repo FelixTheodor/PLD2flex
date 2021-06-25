@@ -1,4 +1,5 @@
-protocols/*
+data/protocols/*
+data/results/*
 results/*
 .vscode
 
