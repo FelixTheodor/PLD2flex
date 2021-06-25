@@ -1,0 +1,36 @@
+-ContentManager in cm regelt alles mit 
+    - dateien einlesen
+    - logging
+    - speichern von ergebnissen
+    - anbindung an GUI
+
+-main.py erstellt nur den CM und ruft "run" auf
+
+-alles in logic arbeitet NUR mit data, keine dateien etc
+
+-WordObject in logic ist das objekt mit dem PLD20 umgeht:
+    -phon
+    -orth
+    -current_levi <-- wird dynamisch angepasst
+
+-PLD20 in logic arbeitet mit WordObjects und Corpora (Listen von WOs)
+
+
+--------------------------------
+-orthogrphaisch in output -> DONE
+-aufgabentrennung durch OOP -> DONE
+-keine temp.txt mehr -> DONE
+-andere Buttons anpassen
+-evtl numpy für mehr performance?
+-config.txt um ordner zu laden
+-corpora in ordner zu beginn laden
+-mehrsprachigkeit in config
+-orthographische repr in config?
+-für binarys etc: https://build-system.fman.io/
+
+----------------------------------------
+Vorschläge für Erweiterungen:
+-Ping-Methode um Server-Load zu checken
+-Worker-Threads implementieren fürs logging/performance 
+-software tests schreiben um sicher zu gehen, dass alles wie erwartet funktioniert
+-Für korpus-internen Vergleich muss target auch befüllt sein, !NONE! oder so
