@@ -128,7 +128,7 @@ class Ui_MainWindow(object):
         #self.fileOne.setText(_translate("MainWindow", "File (one column)"))
         self.fileType.setToolTip(_translate("MainWindow", "Click here to choose your filetype"))
         self.compareList.setToolTip(_translate("MainWindow", "Click here to compare your target with a list of words"))
-        self.compareList.setText(_translate("MainWindow", "Compare with input list/file"))
+        self.compareList.setText(_translate("MainWindow", "Compare input list or file"))
         #self.chooseDatabase.setText(_translate("MainWindow", "Choose your database for comparison"))
         self.compareCel.setToolTip(_translate("MainWindow", "Click here to compare your word with database"))
         self.compareCel.setText(_translate("MainWindow", "Compare with database:"))

@@ -15,7 +15,35 @@ class PLD20:
         return mean, corpus
     
     def compare_corpus(self, corpus):
-        return []
+        count_all_levi = 0
+        count_all_corpus = 0
+        for entry in corpus:
+            count_cur_levi = 0
+            count_cur_corpus = 0
+            cl = []
+            for comp in corpus:
+                if comp.phon == entry.phon:
+                    continue
+                cur_levi = 0
+                already = [x for x in comp.comp_levis if x.phon == entry.phon]
+                if len(already) != 0:
+                    cur_levi = already[0].levi
+                else:
+                    cur_levi = self.levenshtein(entry.phon, comp.phon)
+                ncomp = comp.copy()
+                ncomp.levi = cur_levi
+                cl.append(ncomp)
+                count_all_levi += cur_levi
+                count_cur_levi += cur_levi
+                count_all_corpus += 1
+                count_cur_corpus += 1
+            entry.levi = count_cur_levi/count_cur_corpus
+            entry.comp_levis = cl
+        mean = count_all_levi/count_all_corpus
+        self.sort_corpus(corpus)
+
+        return mean, corpus
+                
     
     
     def lev20(self, target, corpus):
@@ -89,7 +117,7 @@ class PLD20:
                 orth = line.split(";")[0].replace(" ","")
                 phon = line.split(";")[1].replace(" ","")
                 if orth != None and phon != None:
-                    wo = WordObject(orth, phon=phon)
+                    wo = WordObject(orth, p=phon)
                     corpus.append(wo)
         return corpus
     

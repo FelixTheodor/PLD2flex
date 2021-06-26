@@ -55,33 +55,20 @@ class ContentManager:
             self.log("No list or file provided.")
             return
 
-        file_mode = self.ui.fileType.currentText()
+        input_mode = self.ui.fileType.currentText()
         input_text = self.ui.input.toPlainText()
         target_text = self.ui.target.text()
         target_provided = target_text != ""
         path_provided = "file://" in str(input_text)
 
-        if path_provided and file_mode == "Two columns":
-            self.log("comparing columns in " + input_text +":\n")
-            return self.columns_compare(input_text.replace("file://", ""))
-        
-        # create phonlist
-        if path_provided and file_mode == "One column":
-            to_log = "file " + input_text
-            phon_list = self.connector.get_phons_from_file(input_text.replace("file://", ""))
+        # for two columns, the process works differently
+        if input_mode == "Two columns":
+            return self.columns_compare(path_provided, input_text)
+        elif input_mode == "One column":
+            return self.one_compare(path_provided, input_text, target_text, target_provided) 
         else:
-            to_log = "the provided list"
-            phon_list = self.connector.get_phons_from_list(input_text)
-
-        corpus = self.PLD20.read_corpus(phon_list.split("\n"))
-        
-        if target_provided:
-            self.log("compare target to " + to_log + ":\n")
-            t_orth = target_text.replace(" ", "")
-            return self.target_compare(t_orth, corpus)
-        
-        self.log("cross compare " + to_log + ":\n")
-        return self.cross_compare(corpus)
+            self.log("something went wrong, invalid input mode!")
+            return
 
     def push_close(self):
         """
@@ -96,26 +83,44 @@ class ContentManager:
         """
         self.log("Not available")
 
+    def one_compare(self, path_provided, input_text, target_text, target_provided):
+        if path_provided:
+            to_log = "file " + input_text
+            phon_list = self.connector.get_phons_from_file(input_text.replace("file://", ""))
+        else:
+            to_log = "the provided list"
+            phon_list = self.connector.get_phons_from_list(input_text)
+        corpus = self.PLD20.read_corpus(phon_list.split("\n"))
+        
+        if target_provided:
+            self.log("compare target to " + to_log + ":\n")
+            t_orth = target_text.replace(" ", "")
+            return self.target_compare(t_orth, corpus)
+        else:
+            self.log("cross compare " + to_log + ":\n")
+            return self.cross_compare(corpus)
+
     def cross_compare(self, corpus):
-        result = self.PLD20.compare_corpus(corpus)
-        self.log(str(result))
+        mean, corpus = self.PLD20.compare_corpus(corpus)
+        for entry in corpus:
+            self.log(entry.orth + " mean: " + str(entry.levi))
+        self.print_results(mean, corpus)
     
     def target_compare(self, t_orth, corpus):
         t_phon = self.connector.get_single_phon(t_orth)
-        target = WordObject(t_orth, phon=t_phon)
+        target = WordObject(t_orth, p=t_phon)
         # compare target with corpus
         mean, corpus = self.PLD20.compare_to_target(target, corpus)
         
-        self.log("mean: " + str(mean))
-        self.log(self.divider)
-
-        for entry in corpus:
-            self.log(str(entry))
-        
-        self.log(self.divider)
+        self.print_results(mean, corpus)
     
-    def columns_compare(self, path):
-        pass
+    def columns_compare(self, path_provided, input_text):
+        self.log("not implemented yet")
+        if path_provided:
+            self.log("comparing columns in " + input_text +":\n")
+            return
+        else:
+            return
 
     def log(self, msg):
         """
@@ -124,12 +129,19 @@ class ContentManager:
         """
         self.ui.protocol.insertPlainText(msg + "\n")
 
-    def save(self, string):
+    def print_results(self, mean, corpus):
         """
         The function save(string) prints a string into the result filed and file
         :param string: Output
         """
-        print(string + "\nTarget: ;" + self.ui.target.text() + "\nInput: ;" + " ;".join(self.ui.input.toPlainText().split("\n")) + "\n", file= self.fileRes)
+        self.log("mean: " + str(mean))
+        self.log(self.divider)
+
+        for entry in corpus:
+            self.log(str(entry))
+        
+        self.log(self.divider)
+
 
     def connectSeq(self):
         """
