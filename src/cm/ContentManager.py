@@ -84,6 +84,10 @@ class ContentManager:
         self.log("Not available")
 
     def one_compare(self, path_provided, input_text, target_text, target_provided):
+        for line in input_text.split("\n"):
+            if " " in line:
+                self.log("ERROR: too many columns!")
+                return
         if path_provided:
             to_log = "file " + input_text
             phon_list = self.connector.get_phons_from_file(input_text.replace("file://", ""))
@@ -115,12 +119,23 @@ class ContentManager:
         self.print_results(mean, corpus)
     
     def columns_compare(self, path_provided, input_text):
-        self.log("not implemented yet")
+        msgs = []
         if path_provided:
             self.log("comparing columns in " + input_text +":\n")
             return
         else:
-            return
+            for line in input_text.split("\n"):
+                pair = line.split(" ")
+                if len(pair) != 2:
+                    self.log("ERROR: not every line has two columns!")
+                    return
+                p1 = self.connector.get_single_phon(pair[0])
+                p2 = self.connector.get_single_phon(pair[1])
+                levi = self.PLD20.levenshtein(p1, p2)
+                msgs.append(f"{pair[0]}/{p1}\t{pair[1]}/{p2}\t{levi}")
+        
+        for msg in msgs:
+            self.log(msg)
 
     def log(self, msg):
         """
