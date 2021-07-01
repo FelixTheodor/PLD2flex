@@ -20,18 +20,22 @@
 -orthogrphaisch in output -> DONE
 -aufgabentrennung durch OOP -> DONE
 -keine temp.txt mehr -> DONE
--andere Buttons implementieren
+-andere Buttons implementieren -> DONE
+-warnmeldungen für 20 checken und einbauen
+-nochmal über pdf gehen und alle funktionalitäten abgleichen
 -config über config.txt um ordner zu laden
 -corpora in ordner zu beginn laden
 -mehrsprachigkeit in config
 -orthographische repr in config?
+-two column files effektiver ans BAS schicken
+-connection errors ermöglichen
 -für binarys etc: https://build-system.fman.io/
 
 ----------------------------------------
 Vorschläge für Erweiterungen:
 -Ping-Methode um Server-Load zu checken
 -Worker-Threads implementieren fürs logging/performance
--one/two column Unterscheidung auch für text-input?
--evtl numpy für mehr performance?
+-one/two column Unterscheidung auch für text-input? -> DONE
+-evtl numpy für mehr performance in levi?
 -software tests schreiben um sicher zu gehen, dass alles wie erwartet funktioniert
 -Für korpus-internen Vergleich muss target auch befüllt sein, !NONE! oder so

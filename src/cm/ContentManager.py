@@ -22,8 +22,7 @@ class ContentManager:
         self.connector = BASConnector()
 
         self.divider = "######################"
-        # creating files to save the results
-        self.filePro = open(os.curdir + "/data/protocols/protocol_" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
+        # creating file to save the results
         self.fileRes = open(os.curdir + "/data/results/result" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
 
     # benötigt target und output
@@ -35,7 +34,7 @@ class ContentManager:
         """
         t_orth = str(self.ui.target.text().replace(" ", ""))
         if t_orth == "":
-            self.log("no target specified (...)")
+            self.error("no target specified")
             return
         
         corpus_name = self.ui.chooseDatabase.currentText()
@@ -52,7 +51,7 @@ class ContentManager:
         :return: levenshtein-distances
         """
         if (self.ui.input.toPlainText() == ""):
-            self.log("No list or file provided.")
+            self.error("no list or file provided")
             return
 
         input_mode = self.ui.fileType.currentText()
@@ -74,7 +73,7 @@ class ContentManager:
         """
         Function closes the running process
         """
-        self.filePro.close()
+        self.fileRes.close()
         sys.exit()
 
     def push_help(self):
@@ -85,12 +84,23 @@ class ContentManager:
 
     def one_compare(self, path_provided, input_text, target_text, target_provided):
         for line in input_text.split("\n"):
-            if " " in line:
-                self.log("ERROR: too many columns!")
+            if " " in line or "\t" in line:
+                self.error("too many columns in input")
                 return
         if path_provided:
-            to_log = "file " + input_text
-            phon_list = self.connector.get_phons_from_file(input_text.replace("file://", ""))
+            path = input_text.replace("file://", "").replace("\n", "")
+            to_log = "file " + path.split("/")[-1]
+            if os.path.isfile(path):
+                f = open(path)
+                for line in f.readlines():
+                    if " " in line or "\t" in line:
+                        self.error("too many columns in input file")
+                        return
+                f.close()
+                phon_list = self.connector.get_phons_from_file(path)
+            else:
+                self.error("file not found: " + path)
+                return
         else:
             to_log = "the provided list"
             phon_list = self.connector.get_phons_from_list(input_text)
@@ -116,26 +126,44 @@ class ContentManager:
         # compare target with corpus
         mean, corpus = self.PLD20.compare_to_target(target, corpus)
         
+        self.log("target: " + str(target))
         self.print_results(mean, corpus)
     
     def columns_compare(self, path_provided, input_text):
         msgs = []
+        lines = []
+
         if path_provided:
-            self.log("comparing columns in " + input_text +":\n")
-            return
+            path = input_text.replace("file://", "").replace("\n", "")
+            if os.path.isfile(path): 
+                self.log("comparing columns in " + path.split("/")[-1] +":\n")
+                f = open(path)
+                for line in f.readlines():
+                    lines.append(line.replace("\n", ""))
+                f.close()
+            else:
+                self.error("file not found: " + path)
+                return    
         else:
+            self.log("comparing columns in input field" + ":\n")
             for line in input_text.split("\n"):
-                pair = line.split(" ")
-                if len(pair) != 2:
-                    self.log("ERROR: not every line has two columns!")
-                    return
-                p1 = self.connector.get_single_phon(pair[0])
-                p2 = self.connector.get_single_phon(pair[1])
-                levi = self.PLD20.levenshtein(p1, p2)
-                msgs.append(f"{pair[0]}/{p1}\t{pair[1]}/{p2}\t{levi}")
-        
+                lines.append(line)
+
+        for line in lines:
+            pair = line.split("\t") if "\t" in line else line.split(" ") 
+            if len(pair) != 2:
+                self.error("not every line has two columns")
+                return
+            p1 = self.connector.get_single_phon(pair[0])
+            p2 = self.connector.get_single_phon(pair[1])
+            levi = self.PLD20.levenshtein(p1, p2)
+            msgs.append(f"{pair[0]}/{p1}\t{pair[1]}/{p2}\t{levi}")
+
+        self.log(self.divider)
         for msg in msgs:
-            self.log(msg)
+            #self.log(msg)
+            self.save(msg)
+        self.log(self.divider)
 
     def log(self, msg):
         """
@@ -143,6 +171,19 @@ class ContentManager:
         :param string: Output
         """
         self.ui.protocol.insertPlainText(msg + "\n")
+    
+    def save(self, msg):
+        """
+        The function log(msg) prints a string into the protocol field
+        :param string: Output
+        """
+        self.ui.output.insertPlainText(msg + "\n")
+        self.fileRes.write(msg + "\n")
+    
+    def error(self, msg):
+        self.log("ERROR: " + msg)
+        self.log(self.divider)
+        self.log(self.divider)
 
     def print_results(self, mean, corpus):
         """
@@ -153,7 +194,8 @@ class ContentManager:
         self.log(self.divider)
 
         for entry in corpus:
-            self.log(str(entry))
+            #self.log(str(entry))
+            self.save(str(entry))
         
         self.log(self.divider)
 
@@ -175,5 +217,4 @@ class ContentManager:
 
         self.window.show()
         sys.exit(self.app.exec_())
-        self.filePro.close()
         self.fileRes.close()

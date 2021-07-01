@@ -39,11 +39,11 @@ class BASConnector:
         return result.text
 
     def get_phons_from_file(self, path):
-        file = {'i': open(path)}
-        request = requests.post(self.base_url, data=self.params, files=file)
+        f = {'i': open(path)}
+        request = requests.post(self.base_url, data=self.params, files=f)
         root = ET.fromstring(request.text)
         link = root.find("downloadLink").text
-        result = requests.get(link).text
+        result = requests.get(link)
         result.encoding = "utf-8"
         
         # needs to be read in as a corpus

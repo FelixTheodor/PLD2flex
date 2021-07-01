@@ -11,6 +11,7 @@ class WordObject:
             for key in self.comp_levis:
                 rep = f"{self.orth}/{self.phon}\t{key.orth}/{key.phon}\t{key.levi}\n"
                 r_str += rep
+            r_str = r_str[:-1]
         else:
             r_str = f"{self.orth}\t{self.phon}\t{self.levi}"
         return r_str
