@@ -21,7 +21,7 @@
 -aufgabentrennung durch OOP -> DONE
 -keine temp.txt mehr -> DONE
 -andere Buttons implementieren -> DONE
--warnmeldungen für 20 checken und einbauen -> DONE
+-output stärker trennen (logs/results) -> DONE
 -nochmal über pdf gehen und alle funktionalitäten abgleichen -> DONE
 -config über config.txt um ordner zu laden
 -corpora in ordner zu beginn laden
@@ -33,8 +33,8 @@
 
 ----------------------------------------
 Vorschläge für Erweiterungen:
--Ping-Methode um Server-Load zu checken
--Worker-Threads implementieren fürs logging/performance
 -one/two column Unterscheidung auch für text-input? -> DONE
+-Ping-Methode um Server-Load zu checken
 -evtl numpy für mehr performance in levi?
+-Worker-Threads implementieren fürs logging/performance
 -software tests schreiben um sicher zu gehen, dass alles wie erwartet funktioniert
