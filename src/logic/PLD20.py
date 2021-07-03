@@ -10,19 +10,18 @@ class PLD20:
         Function compares a target word with a corpus
         :return: Function returns the 20 nearest words
         """
-        mean, corpus = self.lev20(target, corpus)
+        corpus = self.lev(target, corpus)
         self.sort_corpus(corpus)
+        mean = self.get_mean_20(corpus)
         return mean, corpus
     
     def compare_corpus(self, corpus):
         count_all_levi = 0
         count_all_corpus = 0
         for entry in corpus:
-            count_cur_levi = 0
-            count_cur_corpus = 0
             cl = []
             for comp in corpus:
-                if comp.phon == entry.phon:
+                if comp.orth == entry.orth:
                     continue
                 cur_levi = 0
                 already = [x for x in comp.comp_levis if x.phon == entry.phon]
@@ -34,37 +33,27 @@ class PLD20:
                 ncomp.levi = cur_levi
                 cl.append(ncomp)
                 count_all_levi += cur_levi
-                count_cur_levi += cur_levi
                 count_all_corpus += 1
-                count_cur_corpus += 1
-            entry.levi = count_cur_levi/count_cur_corpus
+            self.sort_corpus(cl)
+            entry.levi = self.get_mean_20(cl)
             entry.comp_levis = cl
         mean = count_all_levi/count_all_corpus
         self.sort_corpus(corpus)
 
         return mean, corpus
-                
     
-    
-    def lev20(self, target, corpus):
+    def lev(self, target, corpus):
         """
-        The function lev20 calculates the levenshtein-distance  between target and each word in corpus
+        The function lev calculates the levenshtein-distance  between target and each word in corpus
         :param target word object:
         :param transcripted corpus word objects:
         :return mean of calculation and corpus with added levenshtein-distances:
         """
-        count_levi = 0
         for entry in corpus:
-            # calculate levi
             cur_levi = self.levenshtein(target.phon, entry.phon)
-            # append both to count and list
-            count_levi += cur_levi
             entry.levi = cur_levi
 
-        # calculate mean
-        mean = count_levi/len(corpus)
-
-        return mean, corpus
+        return corpus
 
     def levenshtein(self, w1,w2):
         """
@@ -105,8 +94,23 @@ class PLD20:
                     distance[i][j] = neighbours[0] +1
         return distance[len(word1)][len(word2)]
     
+    def get_mean_20(self, corpus):
+        count = 0
+        for word in corpus[0:20]:
+            count += word.levi
+        return count/20
+
     def sort_corpus(self, corpus):
         corpus.sort(key=lambda x: x.levi)
+        zero_entrys = []
+        for entry in corpus:
+            if entry.levi == 0:
+                zero_entrys.append(entry)
+            else:
+                break
+        for entry in zero_entrys:
+            corpus.remove(entry)
+
     
     def read_corpus(self, content):
         corpus = []
@@ -120,11 +124,3 @@ class PLD20:
                     wo = WordObject(orth, p=phon)
                     corpus.append(wo)
         return corpus
-    
-    # this functionality should be in 
-    def getFile(self, target_orth, target_phon, files):
-            # function prints the 20 nearest words in a file named target-lev20.txt
-        with open(os.curdir + "/results/" + target_orth + "-lev20.txt", mode = "w", encoding = "utf-8") as output:
-            for w2 in sorted(files)[:20]:
-                print(w2[1] + "\t" + str(w2[0]), file = output)
-        return os.curdir + "/results/" + target_orth + "-lev20.txt"

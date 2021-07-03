@@ -39,8 +39,10 @@ class BASConnector:
         return result.text
 
     def get_phons_from_file(self, path):
-        f = {'i': open(path)}
+        fi = open(path)
+        f = {'i': fi}
         request = requests.post(self.base_url, data=self.params, files=f)
+        fi.close()
         root = ET.fromstring(request.text)
         link = root.find("downloadLink").text
         result = requests.get(link)

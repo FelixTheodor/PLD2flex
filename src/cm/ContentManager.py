@@ -34,7 +34,7 @@ class ContentManager:
         """
         t_orth = str(self.ui.target.text().replace(" ", ""))
         if t_orth == "":
-            self.error("no target specified")
+            self.error("no data in target")
             return
         
         corpus_name = self.ui.chooseDatabase.currentText()
@@ -43,15 +43,17 @@ class ContentManager:
             content = file.read().split("\n")
         corpus = self.PLD20.read_corpus(content)
 
+        self.log("comparing target to " + corpus_name + "\n")
+
         return self.target_compare(t_orth, corpus)
 
-    def push_file(self):
+    def push_input(self):
         """
         Function reacts to the user clicking on "Compare with file/list" calculates the levenshtein-distances and prints the output
         :return: levenshtein-distances
         """
         if (self.ui.input.toPlainText() == ""):
-            self.error("no list or file provided")
+            self.error("no list or file in input")
             return
 
         input_mode = self.ui.fileType.currentText()
@@ -62,6 +64,9 @@ class ContentManager:
 
         # for two columns, the process works differently
         if input_mode == "Two columns":
+            if target_provided:
+                self.error("comparing two columns is not possible with given target")
+                return
             return self.columns_compare(path_provided, input_text)
         elif input_mode == "One column":
             return self.one_compare(path_provided, input_text, target_text, target_provided) 
@@ -99,12 +104,15 @@ class ContentManager:
                 f.close()
                 phon_list = self.connector.get_phons_from_file(path)
             else:
-                self.error("file not found: " + path)
+                self.error("cannot read file: " + path)
                 return
         else:
             to_log = "the provided list"
             phon_list = self.connector.get_phons_from_list(input_text)
         corpus = self.PLD20.read_corpus(phon_list.split("\n"))
+
+        if len(corpus) < 20:
+            self.log("WARN: these are less than 20 words!")
         
         if target_provided:
             self.log("compare target to " + to_log + ":\n")
@@ -115,9 +123,12 @@ class ContentManager:
             return self.cross_compare(corpus)
 
     def cross_compare(self, corpus):
+        if len(corpus) < 21:
+            self.error("cross compare only possible with more than 20 entrys")
+            return
         mean, corpus = self.PLD20.compare_corpus(corpus)
         for entry in corpus:
-            self.log(entry.orth + " mean: " + str(entry.levi))
+            self.log(entry.orth + " mean:\t" + str(entry.levi))
         self.print_results(mean, corpus)
     
     def target_compare(self, t_orth, corpus):
@@ -126,7 +137,7 @@ class ContentManager:
         # compare target with corpus
         mean, corpus = self.PLD20.compare_to_target(target, corpus)
         
-        self.log("target: " + str(target))
+        self.log("tested target:\t" + str(target))
         self.print_results(mean, corpus)
     
     def columns_compare(self, path_provided, input_text):
@@ -150,6 +161,8 @@ class ContentManager:
                 lines.append(line)
 
         for line in lines:
+            if line in ["\n", "", " "]:
+                continue
             pair = line.split("\t") if "\t" in line else line.split(" ") 
             if len(pair) != 2:
                 self.error("not every line has two columns")
@@ -159,6 +172,7 @@ class ContentManager:
             levi = self.PLD20.levenshtein(p1, p2)
             msgs.append(f"{pair[0]}/{p1}\t{pair[1]}/{p2}\t{levi}")
 
+        self.log(f"count corpus:\t{len(msgs)}")
         self.log(self.divider)
         for msg in msgs:
             #self.log(msg)
@@ -190,8 +204,12 @@ class ContentManager:
         The function save(string) prints a string into the result filed and file
         :param string: Output
         """
-        self.log("mean: " + str(mean))
+        self.log("mean-distance:\t" + str(mean))
+        self.log(f"count corpus: \t{len(corpus)}")
         self.log(self.divider)
+
+        if len(corpus) > 20:
+            corpus = corpus[0:20]
 
         for entry in corpus:
             #self.log(str(entry))
@@ -210,7 +228,7 @@ class ContentManager:
         for corpus in self.config.corpus_files.keys():
             self.ui.chooseDatabase.addItem(corpus)
     
-        self.ui.compareList.clicked.connect(self.push_file)
+        self.ui.compareList.clicked.connect(self.push_input)
         self.ui.compareCel.clicked.connect(self.push_database)
         self.ui.actionClose.triggered.connect(self.push_close)
         self.ui.actionHelp.triggered.connect(self.push_help)
