@@ -23,18 +23,19 @@
 -andere Buttons implementieren -> DONE
 -output stärker trennen (logs/results) -> DONE
 -nochmal über pdf gehen und alle funktionalitäten abgleichen -> DONE
--config über config.txt um ordner zu laden
--corpora in ordner zu beginn laden
--mehrsprachigkeit in config
+-config über config.txt um ordner zu laden -> DONE
+-corpora in ordner zu beginn laden -> DONE
+-mehrsprachigkeit in config -> DONE
+-connection errors ermöglichen -> DONE
 -orthographische repr in config?
 -two column files effektiver ans BAS schicken
--connection errors ermöglichen
 -für binarys etc: https://build-system.fman.io/
 
 ----------------------------------------
 Vorschläge für Erweiterungen:
 -one/two column Unterscheidung auch für text-input? -> DONE
--Ping-Methode um Server-Load zu checken
+-input list/file mit corpus vergleichen?
+-ping-on-start-up um Server-Load zu checken
 -evtl numpy für mehr performance in levi?
 -Worker-Threads implementieren fürs logging/performance
 -software tests schreiben um sicher zu gehen, dass alles wie erwartet funktioniert

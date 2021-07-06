@@ -1,5 +1,6 @@
 import sys
 import os
+import requests
 
 from PyQt5.QtWidgets import QApplication, QMainWindow # pylint: disable=no-name-in-module
 from PyQt5 import QtCore
@@ -19,9 +20,11 @@ class ContentManager:
 
         self.config = Config()
         self.PLD20 = PLD20()
-        self.connector = BASConnector()
+        self.connector = BASConnector(self.config.lang)
 
-        self.divider = "######################"
+        self.corpora = {}
+
+        self.divider = "####################################"
         # creating file to save the results
         self.fileRes = open(os.curdir + "/data/results/result" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
 
@@ -38,10 +41,7 @@ class ContentManager:
             return
         
         corpus_name = self.ui.chooseDatabase.currentText()
-        # should be done on start-up
-        with open(self.config.corpus_files[corpus_name], encoding = "utf-8", mode = "r") as file:
-            content = file.read().split("\n")
-        corpus = self.PLD20.read_corpus(content)
+        corpus = self.corpora[corpus_name]
 
         self.log("comparing target to " + corpus_name + "\n")
 
@@ -102,13 +102,20 @@ class ContentManager:
                         self.error("too many columns in input file")
                         return
                 f.close()
-                phon_list = self.connector.get_phons_from_file(path)
+                try:
+                    phon_list = self.connector.get_phons_from_file(path)
+                except requests.exceptions.RequestException:
+                    self.error("connection to BAS refused")
             else:
                 self.error("cannot read file: " + path)
                 return
         else:
             to_log = "the provided list"
-            phon_list = self.connector.get_phons_from_list(input_text)
+            try:
+                phon_list = self.connector.get_phons_from_list(input_text)
+            except requests.exceptions.RequestException:
+                self.error("connection to BAS refused")
+                return
         corpus = self.PLD20.read_corpus(phon_list.split("\n"))
 
         if len(corpus) < 20:
@@ -132,7 +139,11 @@ class ContentManager:
         self.print_results(mean, corpus)
     
     def target_compare(self, t_orth, corpus):
-        t_phon = self.connector.get_single_phon(t_orth)
+        try:
+            t_phon = self.connector.get_single_phon(t_orth)
+        except requests.exceptions.RequestException:
+            self.error("connection to BAS refused")
+            return
         target = WordObject(t_orth, p=t_phon)
         # compare target with corpus
         mean, corpus = self.PLD20.compare_to_target(target, corpus)
@@ -167,8 +178,12 @@ class ContentManager:
             if len(pair) != 2:
                 self.error("not every line has two columns")
                 return
-            p1 = self.connector.get_single_phon(pair[0])
-            p2 = self.connector.get_single_phon(pair[1])
+            try:
+                p1 = self.connector.get_single_phon(pair[0])
+                p2 = self.connector.get_single_phon(pair[1])
+            except requests.exceptions.RequestException:
+                self.error("connection to BAS refused")
+                return
             levi = self.PLD20.levenshtein(p1, p2)
             msgs.append(f"{pair[0]}/{p1}\t{pair[1]}/{p2}\t{levi}")
 
@@ -217,6 +232,31 @@ class ContentManager:
         
         self.log(self.divider)
 
+    def read_corpora(self):
+        for key in self.config.corpus_files.keys():
+            path = self.config.corpus_files[key]
+            with open(path, encoding = "utf-8", mode = "r") as file:
+                content = file.read().split("\n")
+            corpus = self.PLD20.read_corpus(content)
+            if corpus != None and len(corpus) != 0:
+                self.corpora[key] = corpus
+            else:
+                self.log(f"WARN: file {key} is not a valid corpus")
+            
+
+        for corpus in self.corpora.keys():
+            self.ui.chooseDatabase.addItem(corpus)
+
+    def report_config(self):
+        self.log("---------------------------------------")
+        self.log(f"current configuration:\ncorpora:\t{len(self.corpora)} initialized")
+        self.log(f"language:\t{self.config.lang}\nuse old20:\t{self.config.old}")
+        self.log(self.divider)
+        self.log(self.divider)
+        
+
+    def ping(self):
+        pass
 
     def connectSeq(self):
         """
@@ -224,9 +264,6 @@ class ContentManager:
         :return:
         """
         self.ui.setupUi(self.window)
-
-        for corpus in self.config.corpus_files.keys():
-            self.ui.chooseDatabase.addItem(corpus)
     
         self.ui.compareList.clicked.connect(self.push_input)
         self.ui.compareCel.clicked.connect(self.push_database)
@@ -234,5 +271,8 @@ class ContentManager:
         self.ui.actionHelp.triggered.connect(self.push_help)
 
         self.window.show()
+        self.read_corpora()
+        self.report_config()
+        self.ping()
         sys.exit(self.app.exec_())
         self.fileRes.close()

@@ -1,0 +1,3 @@
+DBFOLDER=/home/felix/VSProjects/PLD20/data/corpora
+LANGUAGE=deu-DE
+OLD=False

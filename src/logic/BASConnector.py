@@ -3,9 +3,9 @@ import requests
 import xml.etree.ElementTree as ET
 
 class BASConnector:
-    def __init__(self):
+    def __init__(self, lang):
         self.base_url = "https://clarin.phonetik.uni-muenchen.de/BASWebServices/services/runG2P"
-        self.params = {"com": "no","align": "no","outsym": "sampa","stress": "no","lng": "deu-DE","syl": "no",
+        self.params = {"com": "no","align": "no","outsym": "sampa","stress": "no","lng": lang,"syl": "no",
                         "embed": "no","iform": "list","nrm": "no","oform": "tab","map": "no","featset": "standard"}
     
     def ping(self):
