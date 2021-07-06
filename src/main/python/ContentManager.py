@@ -43,6 +43,9 @@ class ContentManager:
             return
         
         corpus_name = self.ui.chooseDatabase.currentText()
+        if corpus_name == "":
+            self.error("no corpus provided")
+            return
         corpus = self.corpora[corpus_name]
 
         self.log("comparing target to " + corpus_name + "\n")

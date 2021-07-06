@@ -2,7 +2,8 @@ import os
 
 class Config:
     def __init__(self):
-        self.corpus_folder = None
+        self.corpus_folder = {}
+        self.corpus_files = {}
         self.lang = "deu-DE"
         self.old = "False"
         self.read_from_file()
@@ -10,6 +11,8 @@ class Config:
         
 
     def read_from_file(self):
+        if os.path.isfile(os.curdir + "/config.txt"):
+            return
         f = open(os.curdir + "/config.txt")
         for line in f.readlines():
             spline = line.replace("\n", "").split("=")
@@ -24,7 +27,7 @@ class Config:
         f.close()
     
     def init_corpus_files(self):
-        if self.corpus_folder == None or not os.path.isdir(self.corpus_folder):
+        if len(self.corpus_folder) == 0 or not os.path.isdir(self.corpus_folder):
             return
         self.corpus_files = {}
         for name in os.listdir(self.corpus_folder):
