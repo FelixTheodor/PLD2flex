@@ -29,7 +29,3 @@ class Config:
         self.corpus_files = {}
         for name in os.listdir(self.corpus_folder):
             self.corpus_files[name.split(".")[0]] = self.corpus_folder + "/" + name
-
-c = Config()
-
-print(c.corpus_files)

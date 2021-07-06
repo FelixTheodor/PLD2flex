@@ -1,0 +1,8 @@
+{
+    "app_name": "PLD20",
+    "author": "Eva Belke, Felix Theodor, Helena Wedig",
+    "main_module": "src/main/python/main.py",
+    "version": "0.0.0",
+    "gpg_key": "43AC100B1634902F1CC3FF0CA067B24AB747A34B",
+    "gpg_name": "Felix Theodor"
+}

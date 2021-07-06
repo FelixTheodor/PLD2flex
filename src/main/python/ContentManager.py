@@ -2,19 +2,21 @@ import sys
 import os
 import requests
 
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5.QtWidgets import QApplication, QMainWindow # pylint: disable=no-name-in-module
 from PyQt5 import QtCore
 from datetime import datetime
 
-from src.cm.config import Config # pylint: disable=import-error
-from src.logic.WordObject import WordObject # pylint: disable=import-error
-from src.logic.PLD20 import PLD20 # pylint: disable=import-error
-from src.logic.BASConnector import BASConnector # pylint: disable=import-error
-from src.cqt.GUI import Ui_MainWindow # pylint: disable=import-error
+from config import Config # pylint: disable=import-error
+from WordObject import WordObject # pylint: disable=import-error
+from PLD20 import PLD20 # pylint: disable=import-error
+from BASConnector import BASConnector # pylint: disable=import-error
+from GUI import Ui_MainWindow # pylint: disable=import-error
 
 class ContentManager:
     def __init__(self):
-        self.app = QApplication(sys.argv)
+        self.appctxt = ApplicationContext()
+        #self.app = QApplication(sys.argv)
         self.window = QMainWindow()
         self.ui = Ui_MainWindow()
 
@@ -274,5 +276,6 @@ class ContentManager:
         self.read_corpora()
         self.report_config()
         self.ping()
-        sys.exit(self.app.exec_())
+        exit_code = self.appctxt.app.exec()      # 2. Invoke appctxt.app.exec()
+        sys.exit(exit_code)
         self.fileRes.close()

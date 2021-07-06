@@ -2,7 +2,7 @@ import requests
 import os
 import xml.etree.ElementTree as ET
 
-from src.logic.WordObject import WordObject # pylint: disable=import-error
+from WordObject import WordObject # pylint: disable=import-error
 
 class PLD20:
     def compare_to_target(self, target, corpus):
