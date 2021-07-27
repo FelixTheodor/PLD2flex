@@ -1,21 +1,3 @@
--ContentManager in cm regelt alles mit 
-    - dateien einlesen
-    - logging
-    - speichern von ergebnissen
-    - anbindung an GUI
-
--main.py erstellt nur den CM und ruft "run" auf
-
--alles in logic arbeitet NUR mit data, keine dateien etc
-
--WordObject in logic ist das objekt mit dem PLD20 umgeht:
-    -phon
-    -orth
-    -current_levi <-- wird dynamisch angepasst
-
--PLD20 in logic arbeitet mit WordObjects und Corpora (Listen von WOs)
-
-
 --------------------------------
 -orthogrphaisch in output -> DONE
 -aufgabentrennung durch OOP -> DONE
@@ -41,11 +23,10 @@ Vorschläge für Erweiterungen:
 -evtl numpy für mehr performance in levi? -> Check -> DONE (levi)
 
 Clean-Up-ToDos:
--output-dateien/screenshots mail
-    -> zu den vier varianten je ein screenshot und files
--ordner-struktur vereinfachen
--unterscheidung durch header in resultfile
--pfad zur config angeben
+-output-dateien/screenshots mail -> DONE
+-ordner-struktur vereinfachen -> DONE
+-unterscheidung durch header in resultfile -> DONE
+-pfad zur config angeben -> DONE
 -output ordner flexibel machen 
 -requirements.txt anpassen, readme mit installation-guide
 -code final kommentieren
