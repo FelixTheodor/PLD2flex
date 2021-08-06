@@ -2,7 +2,6 @@ import sys
 import os
 import requests
 
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5.QtWidgets import QApplication, QMainWindow # pylint: disable=no-name-in-module
 from PyQt5 import QtCore
 from datetime import datetime
@@ -32,8 +31,8 @@ class ContentManager:
 
         self.divider = "####################################"
         # creating file to save the results
-        self.fileRes = open(os.getcwd() + "/data/results/result" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
-        self.fileLog = open(os.getcwd() + "/data/logs/log" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
+        self.fileRes = open(self.config.result_path + "result" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
+        self.fileLog = open(self.config.log_path + "log" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
         
 
 
@@ -155,7 +154,7 @@ class ContentManager:
             new_cd.input = cd.input
             new_cd.path_word = corpus_name
             # compare target with corpus
-            new_cd.pld20, new_cd.sd, new_cd.corpus = self.PLD20.compare_to_target(word, cd.corpus)
+            new_cd.pld20, new_cd.sd, new_cd.corpus = self.PLD20.compare_to_target(word, cd.corpus, self.config.neighbours)
             all_levi.append(new_cd.pld20)
     
             self.protocol("tested target:\t" + str(word))
@@ -202,8 +201,8 @@ class ContentManager:
         corpus = self.PLD20.read_corpus(phon_list.split("\n"))
         cd.corpus = corpus
 
-        if len(corpus) < 20:
-            self.warn("these are less than 20 words!", cd)
+        if len(corpus) < self.config.neighbours:
+            self.warn(f"these are less than {self.config.neighbours} words!", cd)
         
         if target_provided:
             self.protocol("compare target to " + to_log + ":\n")
@@ -218,7 +217,7 @@ class ContentManager:
         if len(cd.corpus) < 21:
             self.error("cross compare only possible with more than 20 entrys",cd)
             return
-        cd.pld20, cd.sd, cd.corpus = self.PLD20.compare_corpus(cd.corpus)
+        cd.pld20, cd.sd, cd.corpus = self.PLD20.compare_corpus(cd.corpus, self.config.neighbours)
         for entry in cd.corpus:
             self.protocol(entry.orth + " mean:\t" + str(entry.levi))
         self.protocol("")
@@ -234,7 +233,7 @@ class ContentManager:
         target = WordObject(t_orth, p=t_phon)
         cd.target = target
         # compare target with corpus
-        cd.pld20, cd.sd, cd.corpus = self.PLD20.compare_to_target(cd.target, cd.corpus)
+        cd.pld20, cd.sd, cd.corpus = self.PLD20.compare_to_target(cd.target, cd.corpus, self.config.neighbours)
         
         self.protocol("tested target:\t" + str(target))
         self.print_results(cd)
@@ -346,8 +345,8 @@ class ContentManager:
         self.protocol(f"count corpus: \t{len(cd.corpus)}")
         self.protocol(self.divider)
 
-        if len(cd.corpus) > 20:
-            cd.corpus = cd.corpus[0:20]
+        if len(cd.corpus) > self.config.neighbours:
+            cd.corpus = cd.corpus[0:self.config.neighbours]
 
         for entry in cd.corpus:
             self.save(cd.save(str(entry)))
@@ -394,9 +393,10 @@ class ContentManager:
         self.protocol(f"path to config: {self.config.path}")
         self.protocol("---------------------------------------")
         self.protocol(f"current configuration:\ncorpora:\t{len(self.corpora)} initialized")
-        self.protocol(f"language:\t{self.config.lang}\nuse old20:\t{self.config.old}")
+        self.protocol(f"language:\t{self.config.lang}\nneighborus:\t{self.config.neighbours}")
+        self.protocol(f"results-path:\t{self.config.result_path}\nlogs-path:\t{self.config.log_path}")
         self.protocol("---------------------------------------")
-        self.log(f"configuration: {len(self.corpora)} corpora initialized, language: {self.config.lang}, use old20: {self.config.old}")
+        self.log(f"configuration: {len(self.corpora)} corpora initialized, language: {self.config.lang}, neighbours: {self.config.neighbours}")
 
     def ping(self):
         """

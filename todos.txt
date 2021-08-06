@@ -27,8 +27,10 @@ Clean-Up-ToDos:
 -ordner-struktur vereinfachen -> DONE
 -unterscheidung durch header in resultfile -> DONE
 -pfad zur config angeben -> DONE
--output ordner flexibel machen 
--requirements.txt anpassen, readme mit installation-guide
+-script zur analyse von corpus schreiben -> DONE
+-anzahl an neigbours flexibel machen -> DONE
+-output ordner flexibel machen -> DONE
+-requirements.txt anpassen, readme mit installation-guide -> DONE (?)
 -code final kommentieren
 -user manual anpassen
 

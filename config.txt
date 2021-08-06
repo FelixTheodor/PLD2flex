@@ -1,3 +1,5 @@
 DBFOLDER=/home/felix/VSProjects/PLD20/data/corpora
 LANGUAGE=deu-DE
-OLD=False
+NEIGHBOURS=30
+RESULTS_PATH=/home/felix/VSProjects/PLD20/data/results/
+LOGS_PATH=/home/felix/VSProjects/PLD20/data/logs/

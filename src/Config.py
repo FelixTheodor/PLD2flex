@@ -5,7 +5,9 @@ class Config:
         self.corpus_folder = {}
         self.corpus_files = {}
         self.lang = "deu-DE"
-        self.old = "False"
+        self.neighbours = 20
+        self.result_path = os.getcwd() + "/data/results/"
+        self.log_path = os.getcwd() + "/data/logs/"
         self.path = os.getcwd() + "/config.txt"
         self.read_from_file()
         self.init_corpus_files()
@@ -22,8 +24,15 @@ class Config:
                     self.corpus_folder = val
                 elif cat == "LANGUAGE":
                     self.lang = val
-                elif cat == "OLD":
-                    self.old = val
+                elif cat == "NEIGHBOURS":
+                    try:
+                        self.neighbours = int(val)
+                    except ValueError:
+                        print("value for neighbours is not an int!")
+                elif cat == "RESULTS_PATH":
+                    self.result_path = val
+                elif cat == "LOGS_PATH":
+                    self.log_path = val
         f.close()
     
     def init_corpus_files(self):

@@ -8,18 +8,18 @@ from src.WordObject import WordObject # pylint: disable=import-error
 
 
 class PLD20:
-    def compare_to_target(self, target, corpus):
+    def compare_to_target(self, target, corpus, ncount):
         """
         Function compares a target word with a corpus
         :return: Function returns the 20 nearest words
         """
         corpus = self.lev(target, corpus)
         self.sort_corpus(corpus)
-        mean, sd = self.get_mean_20(corpus)
+        mean, sd = self.get_mean_neighbours(corpus, ncount)
 
         return mean, sd, corpus
     
-    def compare_corpus(self, corpus):
+    def compare_corpus(self, corpus, ncount):
         count_all_levi = []
         for entry in corpus:
             cl = []
@@ -37,7 +37,7 @@ class PLD20:
                 cl.append(ncomp)
                 count_all_levi.append(cur_levi)
             self.sort_corpus(cl)
-            entry.levi = self.get_mean_20(cl)
+            entry.levi = self.get_mean_neighbours(cl, ncount)
             entry.comp_levis = cl
         mean = np.mean(count_all_levi)
         sd = np.std(count_all_levi)
@@ -67,25 +67,25 @@ class PLD20:
         """
         return distance(w1, w2)
     
-    def get_mean_20(self, corpus):
-        c20 = []
-        for word in corpus[0:20]:
-            c20.append(word.levi)
-        mean = np.mean(c20)
-        std = np.std(c20)
+    def get_mean_neighbours(self, corpus, ncount):
+        c_neigh = []
+        for word in corpus[0:ncount]:
+            c_neigh.append(word.levi)
+        mean = np.mean(c_neigh)
+        std = np.std(c_neigh)
         return mean, std
 
     def sort_corpus(self, corpus):
         corpus.sort(key=lambda x: x.levi)
         return
-        zero_entrys = []
-        for entry in corpus:
-            if entry.levi == 0:
-                zero_entrys.append(entry)
-            else:
-                break
-        for entry in zero_entrys:
-            corpus.remove(entry)
+        #zero_entrys = []
+        #for entry in corpus:
+        #    if entry.levi == 0:
+        #        zero_entrys.append(entry)
+        #    else:
+        #        break
+        #for entry in zero_entrys:
+        #    corpus.remove(entry)
 
     
     def read_corpus(self, content):
