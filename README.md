@@ -5,17 +5,22 @@ PLD20 is a tool for computing the phonological Levenshtein distance between word
 
 # How to run the tool
 
-1. Install python3
-2. Install (ana)conda
-3. Install qt (?)
+1. Install python3: https://www.python.org/downloads/
+2. Install (ana)conda: https://conda.io/projects/conda/en/latest/index.html
+3. Install qt 5.15: https://www.qt.io/offline-installers 
 4. Clone this repo, open a new terminal in the main directory of it
 5. Create a new env with this command:
 'conda create --name pld20'
 6. Activate the new environment:
 'conda activate pld20'
-7. Install all required packages via pip:
+7. Install pip in your new environment:
+'conda install pip'
+8. Install all required packages via pip:
 'pip install -r requirements.txt'
-8. Run the main.py:
+-- for macOS Users, you need to install another package: 'pip install PyObjC'
+9. If the installation of a package failed, try to install it manually via pip:
+'pip install missing_package'
+10. Run the main.py:
 'python main.py'
 
 # Usage
