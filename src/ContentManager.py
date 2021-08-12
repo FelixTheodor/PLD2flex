@@ -245,8 +245,8 @@ class ContentManager:
 
         if path_provided:
             cd.input = "file"
-            cd.path_word = path
             path = input_text.replace("file://", "").replace("\n", "")
+            cd.path_word = path
             if os.path.isfile(path): 
                 self.protocol("comparing columns in " + path.split("/")[-1] +":\n")
                 f = open(path)
