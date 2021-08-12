@@ -10,7 +10,7 @@ class Config:
         self.neighbours = 20
         self.result_path = os.getcwd() + f"{SLASH}data{SLASH}results{SLASH}"
         self.log_path = os.getcwd() + f"{SLASH}data{SLASH}logs{SLASH}"
-        self.path = os.getcwd() + "{SLASH}config.txt"
+        self.path = os.getcwd() + f"{SLASH}config.txt"
         self.read_from_file()
         self.init_corpus_files()
         
@@ -23,7 +23,7 @@ class Config:
             if len(spline) == 2:
                 cat, val = spline
                 if cat == "DBFOLDER":
-                    self.corpus_folder = val
+                    self.corpus_folder = val.replace(".", os.getcwd())
                 elif cat == "LANGUAGE":
                     self.lang = val
                 elif cat == "NEIGHBOURS":
@@ -32,9 +32,9 @@ class Config:
                     except ValueError:
                         print("value for neighbours is not an int!")
                 elif cat == "RESULTS_PATH":
-                    self.result_path = val
+                    self.result_path = val.replace(".", os.getcwd())
                 elif cat == "LOGS_PATH":
-                    self.log_path = val
+                    self.log_path = val.replace(".", os.getcwd())
         f.close()
     
     def init_corpus_files(self):

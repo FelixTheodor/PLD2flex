@@ -1,6 +1,4 @@
 data/protocols/*
-data/logs/*
-data/results/*
 src/sign/*
 results/*
 .vscode

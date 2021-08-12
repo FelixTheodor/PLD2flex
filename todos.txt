@@ -31,7 +31,7 @@ Clean-Up-ToDos:
 -anzahl an neigbours flexibel machen -> DONE
 -output ordner flexibel machen -> DONE
 -requirements.txt anpassen, readme mit installation-guide -> DONE
--windows pfade kompatibel machen, anpassen der config mit in guide nehmen, evtl qt raus
+-windows pfade kompatibel machen, anpassen der config mit in guide nehmen, evtl qt raus -> DONE
 -code final kommentieren
 -user manual anpassen
 
