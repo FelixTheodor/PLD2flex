@@ -1,14 +1,16 @@
 import os
 
+SLASH = "/" if os.name != "nt" else "\\"
+
 class Config:
     def __init__(self):
         self.corpus_folder = {}
         self.corpus_files = {}
         self.lang = "deu-DE"
         self.neighbours = 20
-        self.result_path = os.getcwd() + "/data/results/"
-        self.log_path = os.getcwd() + "/data/logs/"
-        self.path = os.getcwd() + "/config.txt"
+        self.result_path = os.getcwd() + f"{SLASH}data{SLASH}results{SLASH}"
+        self.log_path = os.getcwd() + f"{SLASH}data{SLASH}logs{SLASH}"
+        self.path = os.getcwd() + "{SLASH}config.txt"
         self.read_from_file()
         self.init_corpus_files()
         
@@ -40,4 +42,4 @@ class Config:
             return
         self.corpus_files = {}
         for name in os.listdir(self.corpus_folder):
-            self.corpus_files[name.split(".")[0]] = self.corpus_folder + "/" + name
+            self.corpus_files[name.split(".")[0]] = self.corpus_folder + SLASH + name

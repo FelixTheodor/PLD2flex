@@ -9,7 +9,7 @@ import playsound
 import numpy as np
 import copy
 
-from src.Config import Config # pylint: disable=import-error
+from src.Config import Config, SLASH # pylint: disable=import-error
 from src.WordObject import WordObject # pylint: disable=import-error
 from src.PLD20 import PLD20 # pylint: disable=import-error
 from src.BASConnector import BASConnector # pylint: disable=import-error
@@ -173,7 +173,7 @@ class ContentManager:
             path = input_text.replace("file://", "").replace("\n", "")
             cd.input = "file"
             cd.path_word = path
-            to_log = "file " + path.split("/")[-1]
+            to_log = "file " + path.split(SLASH)[-1]
             if os.path.isfile(path):
                 f = open(path)
                 for line in f.readlines():
@@ -248,7 +248,7 @@ class ContentManager:
             path = input_text.replace("file://", "").replace("\n", "")
             cd.path_word = path
             if os.path.isfile(path): 
-                self.protocol("comparing columns in " + path.split("/")[-1] +":\n")
+                self.protocol("comparing columns in " + path.split(SLASH)[-1] +":\n")
                 f = open(path)
                 for line in f.readlines():
                     lines.append(line.replace("\n", ""))
@@ -381,7 +381,7 @@ class ContentManager:
     
     def play_sound(self):
         try:
-            playsound.playsound("data/sounds/bell.mp3")
+            playsound.playsound(f"data{SLASH}sounds{SLASH}bell.mp3")
         except playsound.PlaysoundException:
             print(playsound.PlaysoundException)
 
