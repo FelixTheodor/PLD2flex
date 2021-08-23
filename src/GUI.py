@@ -108,6 +108,9 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
+        """
+        function sets tooltips and placeholders for the UI
+        """
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PLD20"))
         self.labelTarget.setText(_translate("MainWindow", "Target"))

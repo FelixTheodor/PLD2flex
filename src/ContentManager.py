@@ -18,7 +18,6 @@ from src.CommandData import CommandData # pylint: disable=import-error
 
 class ContentManager:
     def __init__(self):
-        #self.appctxt = ApplicationContext()
         self.app = QApplication(sys.argv)
         self.window = QMainWindow()
         self.ui = Ui_MainWindow()
@@ -30,7 +29,7 @@ class ContentManager:
         self.corpora = {}
 
         self.divider = "####################################"
-        # creating file to save the results
+
         self.fileRes = open(self.config.result_path + "result" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
         self.fileLog = open(self.config.log_path + "log" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
         
@@ -41,9 +40,8 @@ class ContentManager:
     #################################################################
     def push_database(self):
         """
-        Function reacts to the user clicking on "Compare with Database"
-        (Corpus has to be in the same directory in the folder "corpora")
-        :return: Function prints the 20 nearest words into the output and the protocol text fields
+        reacts to the user clicking on "Compare with Database"
+        checks the given target and the configured corpus and forwards the operations
         """
         cd = CommandData()
         t_orth = str(self.ui.target.text().replace(" ", ""))
@@ -74,8 +72,8 @@ class ContentManager:
 
     def push_input(self):
         """
-        Function reacts to the user clicking on "Compare with file/list" calculates the levenshtein-distances and prints the output
-        :return: levenshtein-distances
+        reacts to the user clicking on "Compare with file/list"
+        checks for the input type and forwards the operations
         """
         cd = CommandData()
         if (self.ui.input.toPlainText() == ""):
@@ -103,7 +101,7 @@ class ContentManager:
 
     def push_close(self):
         """
-        Function closes the running process
+        closes the running process and closes files
         """
         self.fileRes.close()
         self.fileLog.close()
@@ -121,6 +119,9 @@ class ContentManager:
     # methods doing the comparisons                                 #
     #################################################################
     def database_list_compare(self, cd, input_text, corpus_name):
+        """
+        compares a list of WordObjects to a database of WordObjects
+        """
         if "file://" not in input_text:
             self.protocol("comparing list to " + corpus_name + "\n") 
             cd.input = "gui"
@@ -165,6 +166,9 @@ class ContentManager:
         self.protocol(self.divider)
 
     def one_compare(self, path_provided, input_text, target_text, target_provided, cd):
+        """
+        reads a one-colum file or input and compares it with a target or itself
+        """
         for line in input_text.split("\n"):
             if " " in line or "\t" in line:
                 self.error("too many columns in input", cd)
@@ -213,6 +217,9 @@ class ContentManager:
             return self.cross_compare(cd)
 
     def cross_compare(self, cd):
+        """
+        cross compare a two-cloum file or input list
+        """
         cd.method= "many-to-many"
         if len(cd.corpus) < 21:
             self.error("cross compare only possible with more than 20 entrys",cd)
@@ -224,6 +231,9 @@ class ContentManager:
         self.print_results(cd)
     
     def target_compare(self, t_orth, cd):
+        """
+        compare a target to a list of WordObject
+        """
         cd.method = "one-to-many "
         try:
             t_phon = self.connector.get_single_phon(t_orth)
@@ -239,6 +249,9 @@ class ContentManager:
         self.print_results(cd)
     
     def columns_compare(self, path_provided, input_text, cd):
+        """
+        compare columns of file or input list
+        """
         cd.method = "one-to-one  "
         msgs = []
         lines = []
@@ -296,30 +309,26 @@ class ContentManager:
     #################################################################
     def protocol(self, msg):
         """
-        The function protocol(msg) prints a string into the protocol field
-        :param string: msg
+        print a string into the protocol field
         """
         self.ui.protocol.insertPlainText(msg + "\n")
     
     def save(self, msg):
         """
-        The function save(msg) prints a string into the result file and output field
-        :param string: msg
+        print a string into the result file and output field
         """
         self.ui.output.insertPlainText(msg + "\n")
         self.fileRes.write(msg + "\n")
     
     def log(self, msg):
         """
-        The function log(msg) prints a string into the log file
-        :param string: msg
+        print a string into the log file
         """
         self.fileLog.write(msg + "\n")
     
     def error(self, msg, cd):
         """
-        The function error(msg) prints an error string into the protocol field
-        :param string: msg
+        print an error string into the protocol field and the log file
         """
         self.protocol("ERROR: " + msg)
         self.protocol(self.divider)
@@ -329,16 +338,14 @@ class ContentManager:
 
     def warn(self, msg, cd):
         """
-        The function warn(msg) prints an warn string into the protocol field
-        :param string: msg
+        print an warn string into the protocol field
         """
         self.protocol("WARN: " + msg)
         cd.warn = msg
 
     def print_results(self, cd, log=True):
         """
-        The function save(string) prints a string into the result filed and file
-        :param string: Output
+        print a corpus and according numbers into the result field and file
         """
         self.protocol("mean-distance:\t" + str(cd.pld20))
         self.protocol("std-deviation:\t" + str(cd.sd))
@@ -362,8 +369,7 @@ class ContentManager:
     #################################################################
     def read_corpora(self):
         """
-        Function reads in all the corpora that are in the specified folder
-        :return:
+        read in all the corpora that are in the specified folder
         """
         for key in self.config.corpus_files.keys():
             path = self.config.corpus_files[key]
@@ -380,6 +386,9 @@ class ContentManager:
             self.ui.chooseDatabase.addItem(corpus)
     
     def play_sound(self):
+        """
+        play a bell sound when the current task is done
+        """
         try:
             playsound.playsound(f"data{SLASH}sounds{SLASH}bell.mp3")
         except playsound.PlaysoundException:
@@ -387,8 +396,7 @@ class ContentManager:
 
     def report_config(self):
         """
-        Function shows the user the current configuration
-        :return:
+        show the user the current configuration in the protocol field and the log file
         """
         self.protocol(f"path to config: {self.config.path}")
         self.protocol("---------------------------------------")
@@ -400,8 +408,7 @@ class ContentManager:
 
     def ping(self):
         """
-        Function pings BAS-Server and reports the status
-        :return:
+        ping BAS-Server and reports the current status
         """
         try:
             status = self.connector.ping()
@@ -421,6 +428,9 @@ class ContentManager:
         self.protocol(self.divider)
 
     def init_process(self):
+        """
+        init UI, ping server, create files and read in corpora
+        """
         self.ui.setupUi(self.window)
         self.ui.compareList.clicked.connect(self.push_input)
         self.ui.compareCel.clicked.connect(self.push_database)
@@ -433,10 +443,9 @@ class ContentManager:
         self.log("method\tinput_type\tinput_source\tmean_pld\tsd\terrors\twarnings")
         self.save("target_orth\ttarget_phon\tcomp_orth\tcomp_phon\tlevenshtein\tmethod\tinput_type\tinput_source")
         
-    def connectSeq(self):
+    def run(self):
         """
-        Function connects function with the developed GUI
-        :return:
+        runs the program
         """
         self.window.show()
         exit_code = self.app.exec()

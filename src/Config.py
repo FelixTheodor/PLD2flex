@@ -1,8 +1,12 @@
 import os
 
+# for windows you need other slashes than on mac and linux
 SLASH = "/" if os.name != "nt" else "\\"
 
 class Config:
+    """
+    reads in and holds the configuration data of the apllication
+    """
     def __init__(self):
         self.corpus_folder = {}
         self.corpus_files = {}

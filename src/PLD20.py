@@ -10,8 +10,8 @@ from src.WordObject import WordObject # pylint: disable=import-error
 class PLD20:
     def compare_to_target(self, target, corpus, ncount):
         """
-        Function compares a target word with a corpus
-        :return: Function returns the 20 nearest words
+        compares a target word with a corpus
+        returns the the mean, the sd and the corpus of the operation
         """
         corpus = self.lev(target, corpus)
         self.sort_corpus(corpus)
@@ -20,6 +20,11 @@ class PLD20:
         return mean, sd, corpus
     
     def compare_corpus(self, corpus, ncount):
+        """
+        calculates the lev-distance for every entry in the given corpus
+        compared to the whole corpus
+        returns the sorted corpus and the mean and std or the operation
+        """
         count_all_levi = []
         for entry in corpus:
             cl = []
@@ -61,13 +66,14 @@ class PLD20:
     def levenshtein(self, w1,w2):
         """
         The function levenshtein(w1,w2) calculates the levenshtein-distance of two words
-        :param target word:
-        :param word that will be compared to the target word:
-        :return: levenshtein-distance
+        via the imported distance function for better performance
         """
         return distance(w1, w2)
     
     def get_mean_neighbours(self, corpus, ncount):
+        """
+        calculates the mean and std of the first ncount entrys of the corpus
+        """
         c_neigh = []
         for word in corpus[0:ncount]:
             c_neigh.append(word.levi)
@@ -76,19 +82,17 @@ class PLD20:
         return mean, std
 
     def sort_corpus(self, corpus):
+        """
+        sorts a corpus by the levi-distance
+        """
         corpus.sort(key=lambda x: x.levi)
         return
-        #zero_entrys = []
-        #for entry in corpus:
-        #    if entry.levi == 0:
-        #        zero_entrys.append(entry)
-        #    else:
-        #        break
-        #for entry in zero_entrys:
-        #    corpus.remove(entry)
 
     
     def read_corpus(self, content):
+        """
+        converts a content string by splitting on ';' to a list of WordObjects
+        """
         corpus = []
         for line in content:
             if ";" in line:

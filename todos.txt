@@ -32,7 +32,7 @@ Clean-Up-ToDos:
 -output ordner flexibel machen -> DONE
 -requirements.txt anpassen, readme mit installation-guide -> DONE
 -windows pfade kompatibel machen, anpassen der config mit in guide nehmen, evtl qt raus -> DONE
--code final kommentieren
+-code final kommentieren -> DONE
 -user manual anpassen
 
 

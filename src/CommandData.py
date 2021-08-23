@@ -1,4 +1,7 @@
 class CommandData:
+    """
+    convenient way to store and print all the data of a command to the application
+    """
     def __init__(self):
         self.corpus = None
         self.target = None
