@@ -1,5 +1,5 @@
 DBFOLDER=./data/corpora
 LANGUAGE=deu-DE
-NEIGHBOURS=30
+NEIGHBOURS=20
 RESULTS_PATH=./data/results/
 LOGS_PATH=./data/logs/

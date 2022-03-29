@@ -221,8 +221,8 @@ class ContentManager:
         cross compare a two-cloum file or input list
         """
         cd.method= "many-to-many"
-        if len(cd.corpus) < 21:
-            self.error("cross compare only possible with more than 20 entrys",cd)
+        if len(cd.corpus) < self.config.neighbours + 1 :
+            self.error(f"cross compare only possible with more than {self.config.neighbours} entrys",cd)
             return
         cd.pld20, cd.sd, cd.corpus = self.PLD20.compare_corpus(cd.corpus, self.config.neighbours)
         for entry in cd.corpus:
