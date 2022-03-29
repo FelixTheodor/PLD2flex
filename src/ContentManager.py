@@ -353,7 +353,7 @@ class ContentManager:
         self.protocol(f"count corpus: \t{len(cd.corpus)}")
         self.protocol(self.divider)
 
-        if len(cd.corpus) > self.config.neighbours:
+        if len(cd.corpus) > self.config.neighbours and cd.method != "many-to-many":
             cd.corpus = cd.corpus[0:self.config.neighbours]
 
         for entry in cd.corpus:
