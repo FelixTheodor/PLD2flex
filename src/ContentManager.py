@@ -29,6 +29,7 @@ class ContentManager:
         self.corpora = {}
 
         self.divider = "####################################"
+        self.fileCheck = "file://" if os.name != "nt" else "file:///"
 
         self.fileRes = open(self.config.result_path + "result" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
         self.fileLog = open(self.config.log_path + "log" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
@@ -84,7 +85,7 @@ class ContentManager:
         input_text = self.ui.input.toPlainText()
         target_text = self.ui.target.text()
         target_provided = target_text != ""
-        path_provided = "file://" in str(input_text)
+        path_provided = self.fileCheck in str(input_text)
 
         # for two columns, the process works differently
         if input_mode == "Two columns":
@@ -122,12 +123,12 @@ class ContentManager:
         """
         compares a list of WordObjects to a database of WordObjects
         """
-        if "file://" not in input_text:
+        if self.fileCheck not in input_text:
             self.protocol("comparing list to " + corpus_name + "\n") 
             cd.input = "gui"
             phon_list = self.connector.get_phons_from_list(input_text)
         else: 
-            path = input_text.replace("file://", "").replace("\n", "")
+            path = input_text.replace(self.fileCheck, "").replace("\n", "")
             self.protocol("comparing "+path+" to " + corpus_name + "\n")
             cd.input = "file"
             cd.path_word = path
@@ -174,7 +175,7 @@ class ContentManager:
                 self.error("too many columns in input", cd)
                 return
         if path_provided:
-            path = input_text.replace("file://", "").replace("\n", "")
+            path = input_text.replace(self.fileCheck, "").replace("\n", "")
             cd.input = "file"
             cd.path_word = path
             to_log = "file " + path.split(SLASH)[-1]
@@ -258,7 +259,7 @@ class ContentManager:
 
         if path_provided:
             cd.input = "file"
-            path = input_text.replace("file://", "").replace("\n", "")
+            path = input_text.replace(self.fileCheck, "").replace("\n", "")
             cd.path_word = path
             if os.path.isfile(path): 
                 self.protocol("comparing columns in " + path.split(SLASH)[-1] +":\n")
