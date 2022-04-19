@@ -3,7 +3,7 @@ import os
 import xml.etree.ElementTree as ET
 import numpy as np
 
-from Levenshtein import distance # pylint: disable=no-name-in-module
+import textdistance # pylint: disable=no-name-in-module
 from src.WordObject import WordObject # pylint: disable=import-error
 
 
@@ -68,7 +68,7 @@ class PLD20:
         The function levenshtein(w1,w2) calculates the levenshtein-distance of two words
         via the imported distance function for better performance
         """
-        return distance(w1, w2)
+        return textdistance.levenshtein.distance(w1, w2)
     
     def get_mean_neighbours(self, corpus, ncount):
         """
