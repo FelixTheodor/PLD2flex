@@ -4,7 +4,7 @@ import requests
 
 from PyQt5.QtWidgets import QApplication, QMainWindow # pylint: disable=no-name-in-module
 from PyQt5 import QtCore
-from datetime import datetime
+import time
 import playsound
 import numpy as np
 import copy
@@ -31,8 +31,8 @@ class ContentManager:
         self.divider = "####################################"
         self.fileCheck = "file://" if os.name != "nt" else "file:///"
 
-        self.fileRes = open(self.config.result_path + "result" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
-        self.fileLog = open(self.config.log_path + "log" + str(datetime.now().isoformat(timespec='minutes')) + ".csv", mode="w", encoding="utf-8")
+        self.fileRes = open(self.config.result_path + "result" + time.strftime("%Y-%m-%d_%H-%M-%S") + ".csv", mode="w", encoding="utf-8")
+        self.fileLog = open(self.config.log_path + "log" + time.strftime("%Y-%m-%d_%H-%M-%S") + ".csv", mode="w", encoding="utf-8")
         
 
 
