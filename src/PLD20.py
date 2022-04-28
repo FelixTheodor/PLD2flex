@@ -68,7 +68,7 @@ class PLD20:
         The function levenshtein(w1,w2) calculates the levenshtein-distance of two words
         via the imported distance function for better performance
         """
-        return textdistance.levenshtein.distance(w1, w2)
+        return textdistance.damerau_levenshtein.distance(w1, w2)
     
     def get_mean_neighbours(self, corpus, ncount):
         """
