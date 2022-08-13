@@ -6,6 +6,7 @@ PLD2flex is a GUI-tool for establishing the phonological Levenshtein distance be
 ## How to run the tool
 
 **1. Install python3: https://www.python.org/downloads/**
+
 **2. Install (ana)conda: https://conda.io/projects/conda/en/latest/index.html**
 
 If you are not using windows:
@@ -34,6 +35,7 @@ If you are using macOS:
 
 **5. Should the installation of a package fail, try to install the missing_package manually via pip:**
 'pip install missing_package'
+
 **6. Run the main.py:**
 'python main.py'
 
