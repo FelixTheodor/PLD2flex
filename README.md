@@ -5,14 +5,14 @@ PLD2flex is a GUI-tool for establishing the phonological Levenshtein distance be
 
 ## How to run the tool
 
-1. Install python3: https://www.python.org/downloads/
-2. Install (ana)conda: https://conda.io/projects/conda/en/latest/index.html
+**1. Install python3: https://www.python.org/downloads/**
+**2. Install (ana)conda: https://conda.io/projects/conda/en/latest/index.html**
 
 If you are not using windows:
 
 -2.1 Install qt 5.15: https://www.qt.io/offline-installers  
 
-3. Clone this repo, open a new terminal in the main directory of it
+**3. Clone this repo, open a new terminal in the main directory of it**
 
 (recommended) If you want to use (ana)conda:
 
@@ -25,16 +25,16 @@ If you are not using windows:
 -3.3 Install pip in your new environment:
 'conda install pip'
 
-4. Install all required packages via pip:
+**4. Install all required packages via pip:**
 'pip install -r requirements.txt'
 
 If you are using macOS:
 
 -4.1 Install another package: 'pip install PyObjC'
 
-5. Should the installation of a package fail, try to install the missing_package manually via pip:
+**5. Should the installation of a package fail, try to install the missing_package manually via pip:**
 'pip install missing_package'
-6. Run the main.py:
+**6. Run the main.py:**
 'python main.py'
 
 ## Usage
