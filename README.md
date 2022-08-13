@@ -9,23 +9,25 @@ PLD2flex is a GUI-tool for establishing the phonological Levenshtein distance be
 2. Install (ana)conda: https://conda.io/projects/conda/en/latest/index.html
 
 If you are not using windows:
-2.1 Install qt 5.15: https://www.qt.io/offline-installers  
+-2.1 Install qt 5.15: https://www.qt.io/offline-installers  
 
 3. Clone this repo, open a new terminal in the main directory of it
 
 (recommended) If you want to use (ana)conda:
-3.1 Create a new env with this command:
+-3.1 Create a new env with this command:
 'conda create --name PLD2flex'
-3.2 Activate the new environment:
+
+-3.2 Activate the new environment:
 'conda activate PLD2flex'
-3.3 Install pip in your new environment:
+
+-3.3 Install pip in your new environment:
 'conda install pip'
 
 4. Install all required packages via pip:
 'pip install -r requirements.txt'
 
 If you are using macOS:
-4.1 Install another package: 'pip install PyObjC'
+-4.1 Install another package: 'pip install PyObjC'
 
 5. Should the installation of a package fail, try to install the missing_package manually via pip:
 'pip install missing_package'
