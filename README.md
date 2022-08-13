@@ -27,16 +27,26 @@ If you are not using windows:
 'conda install pip'
 
 **4. Install all required packages via pip:**
+
 'pip install -r requirements.txt'
 
 If you are using macOS:
 
--4.1 Install another package: 'pip install PyObjC'
+-4.1 Install another package: 
+'pip install PyObjC'
 
 **5. Should the installation of a package fail, try to install the missing_package manually via pip:**
+
 'pip install missing_package'
 
+**6. Update the config.txt**
+
+(see section 2.2 of User Guide) 
+For instance, you need to specify the paths for the result / database files. Make sure that you use the right path format for your operating system.
+
+
 **6. Run the main.py:**
+
 'python main.py'
 
 ## Usage

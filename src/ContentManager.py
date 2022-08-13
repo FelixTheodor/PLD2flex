@@ -56,7 +56,7 @@ class ContentManager:
         
         corpus_name = self.ui.chooseDatabase.currentText()
         if corpus_name == "":
-            self.error("no corpus provided", cd)
+            self.error("no database provided", cd)
             return
         corpus = copy.deepcopy(self.corpora[corpus_name])
 
