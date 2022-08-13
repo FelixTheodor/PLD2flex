@@ -1,5 +1,5 @@
 from src.Config import Config
-from src.PLD20 import PLD20
+from src.PLD2flex import PLD2flex
 from src.BASConnector import BASConnector
 from src.WordObject import WordObject
 from os import sys
@@ -9,7 +9,7 @@ c = Config()
 c.read_from_file()
 c.init_corpus_files()
 
-p = PLD20()
+p = PLD2flex()
 b = BASConnector(c.lang)
 
 print("this script works with the same config file as the main program.")

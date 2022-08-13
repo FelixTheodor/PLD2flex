@@ -7,7 +7,7 @@ import textdistance # pylint: disable=no-name-in-module
 from src.WordObject import WordObject # pylint: disable=import-error
 
 
-class PLD20:
+class PLD2flex:
     def compare_to_target(self, target, corpus, ncount):
         """
         compares a target word with a corpus

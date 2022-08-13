@@ -11,7 +11,7 @@ import copy
 
 from src.Config import Config, SLASH # pylint: disable=import-error
 from src.WordObject import WordObject # pylint: disable=import-error
-from src.PLD20 import PLD20 # pylint: disable=import-error
+from src.PLD2flex import PLD2flex # pylint: disable=import-error
 from src.BASConnector import BASConnector # pylint: disable=import-error
 from src.GUI import Ui_MainWindow # pylint: disable=import-error
 from src.CommandData import CommandData # pylint: disable=import-error
@@ -23,7 +23,7 @@ class ContentManager:
         self.ui = Ui_MainWindow()
 
         self.config = Config()
-        self.PLD20 = PLD20()
+        self.PLD2flex = PLD2flex()
         self.connector = BASConnector(self.config.lang)
 
         self.corpora = {}
@@ -147,7 +147,7 @@ class ContentManager:
             else:
                 self.error("cannot read file: " + path, cd)
                 return
-        all_words = self.PLD20.read_corpus(phon_list.split("\n"))
+        all_words = self.PLD2flex.read_corpus(phon_list.split("\n"))
         all_levi = []
         for word in all_words:
             new_cd = CommandData()
@@ -156,12 +156,12 @@ class ContentManager:
             new_cd.input = cd.input
             new_cd.path_word = corpus_name
             # compare target with corpus
-            new_cd.pld20, new_cd.sd, new_cd.corpus = self.PLD20.compare_to_target(word, cd.corpus, self.config.neighbours)
-            all_levi.append(new_cd.pld20)
+            new_cd.PLD2flex, new_cd.sd, new_cd.corpus = self.PLD2flex.compare_to_target(word, cd.corpus, self.config.neighbours)
+            all_levi.append(new_cd.PLD2flex)
     
             self.protocol("tested target:\t" + str(word))
             self.print_results(new_cd, log=False)
-        cd.pld20, cd.sd = np.mean(all_levi), np.std(all_levi)
+        cd.PLD2flex, cd.sd = np.mean(all_levi), np.std(all_levi)
         cd.method = "mul-one-to-many"
         self.log(cd.log())
         self.protocol(self.divider)
@@ -203,7 +203,7 @@ class ContentManager:
             except requests.exceptions.RequestException:
                 self.error("connection to BAS refused", cd)
                 return
-        corpus = self.PLD20.read_corpus(phon_list.split("\n"))
+        corpus = self.PLD2flex.read_corpus(phon_list.split("\n"))
         cd.corpus = corpus
 
         if len(corpus) < self.config.neighbours:
@@ -225,7 +225,7 @@ class ContentManager:
         if len(cd.corpus) < self.config.neighbours + 1 :
             self.error(f"cross compare only possible with more than {self.config.neighbours} entrys",cd)
             return
-        cd.pld20, cd.sd, cd.corpus = self.PLD20.compare_corpus(cd.corpus, self.config.neighbours)
+        cd.PLD2flex, cd.sd, cd.corpus = self.PLD2flex.compare_corpus(cd.corpus, self.config.neighbours)
         for entry in cd.corpus:
             self.protocol(entry.orth + " mean:\t" + str(entry.levi))
         self.protocol("")
@@ -244,7 +244,7 @@ class ContentManager:
         target = WordObject(t_orth, p=t_phon)
         cd.target = target
         # compare target with corpus
-        cd.pld20, cd.sd, cd.corpus = self.PLD20.compare_to_target(cd.target, cd.corpus, self.config.neighbours)
+        cd.PLD2flex, cd.sd, cd.corpus = self.PLD2flex.compare_to_target(cd.target, cd.corpus, self.config.neighbours)
         
         self.protocol("tested target:\t" + str(target))
         self.print_results(cd)
@@ -290,7 +290,7 @@ class ContentManager:
             except requests.exceptions.RequestException:
                 self.error("connection to BAS refused", cd)
                 return
-            levi = self.PLD20.levenshtein(p1, p2)
+            levi = self.PLD2flex.levenshtein(p1, p2)
             msgs.append(f"{pair[0]}\t{p1}\t{pair[1]}\t{p2}\t{levi}")
 
         self.msgs = msgs
@@ -348,7 +348,7 @@ class ContentManager:
         """
         print a corpus and according numbers into the result field and file
         """
-        self.protocol("mean-distance:\t" + str(cd.pld20))
+        self.protocol("mean-distance:\t" + str(cd.PLD2flex))
         self.protocol("std-deviation:\t" + str(cd.sd))
         self.protocol(f"count corpus: \t{len(cd.corpus)}")
         self.protocol(self.divider)
@@ -376,7 +376,7 @@ class ContentManager:
             path = self.config.corpus_files[key]
             with open(path, encoding = "utf-8", mode = "r") as file:
                 content = file.read().split("\n")
-            corpus = self.PLD20.read_corpus(content)
+            corpus = self.PLD2flex.read_corpus(content)
             if corpus != None and len(corpus) != 0:
                 self.corpora[key] = corpus
             else:

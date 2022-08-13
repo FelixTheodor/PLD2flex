@@ -112,7 +112,7 @@ class Ui_MainWindow(object):
         function sets tooltips and placeholders for the UI
         """
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "PLD20"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "PLD2flex"))
         self.labelTarget.setText(_translate("MainWindow", "Target"))
         self.target.setPlaceholderText(_translate("MainWindow", "Insert target here"))
         self.labelInput.setText(_translate("MainWindow", "Input"))

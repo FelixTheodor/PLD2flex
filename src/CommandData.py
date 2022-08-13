@@ -5,7 +5,7 @@ class CommandData:
     def __init__(self):
         self.corpus = None
         self.target = None
-        self.pld20 = None
+        self.PLD2flex = None
         self.sd = None
         self.method = "None"
         self.err = "None"
@@ -26,4 +26,4 @@ class CommandData:
             return r_str
     
     def log(self):
-        return f"{self.method}\t{self.input}\t{self.path_word}\t{self.pld20}\t{self.sd}\t{self.err}\t{self.warn}\t"
+        return f"{self.method}\t{self.input}\t{self.path_word}\t{self.PLD2flex}\t{self.sd}\t{self.err}\t{self.warn}\t"
