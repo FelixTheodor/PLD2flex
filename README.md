@@ -5,20 +5,14 @@ PLD2flex is a GUI-tool for establishing the phonological Levenshtein distance be
 
 ## How to run the tool
 
-**1. Install python3: https://www.python.org/downloads/**
+**1. Install python3.12: https://www.python.org/downloads/**
 
-**2. Install (ana)conda: https://conda.io/projects/conda/en/latest/index.html**
+**2. Install (ana)conda: https://conda.io/projects/conda/en/latest/index.html** 
 
-If you are not using windows:
-
--2.1 Install qt 5.15: https://www.qt.io/offline-installers  
-
-**3. Clone this repo, open a new terminal in the main directory of it**
-
-(recommended) If you want to use (ana)conda:
+**3. Clone this repo, open a new terminal (for Windows: Powershell Prompt) in the main directory of it**
 
 -3.1 Create a new env with this command:
-'conda create --name PLD2flex'
+'conda create --name PLD2flex python=3.12'
 
 -3.2 Activate the new environment:
 'conda activate PLD2flex'
@@ -30,24 +24,36 @@ If you are not using windows:
 
 'pip install -r requirements.txt'
 
-If you are using macOS:
-
--4.1 Install another package: 
-'pip install PyObjC'
-
-**5. Should the installation of a package fail, try to install the missing_package manually via pip:**
-
-'pip install missing_package'
-
-**6. Update the config.txt**
+**5. Update the config.txt**
 
 (see section 2.2 of User Guide) 
 For instance, you need to specify the paths for the result / database files. Make sure that you use the right path format for your operating system.
 
-
 **6. Run the main.py:**
 
 'python main.py'
+
+
+## Installation Troubleshooting
+
+### General:
+- usage of conda is recommended
+- make sure that you use python >=v3.12
+- depending on your system config, you might need to install qt 5.15: 
+https://www.qt.io/offline-installers 
+- should the installation of a package fail, try to install the missing_package manually via pip:
+'pip install missing_package'
+
+### For macOS users:
+- you might need to install another package: 
+'pip install PyObjC'
+
+### For windows users:
+- you might run into this error: Microsoft Visual C++ 14.0 or greater is required
+- if you do, head to the link below and install via the build tools the C++ desktop development component
+https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
+
 
 ## Usage
 
