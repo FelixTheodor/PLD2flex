@@ -3,7 +3,14 @@
 ## Description
 PLD2flex is a GUI-tool for establishing the phonological Levenshtein distance between phonological word forms. This can apply to pairs of word forms, word forms that are compared to lists of other words, including data bases like CELEX (Reference), if available, and any other combination of word forms. PLD2flex takes written (orthographic) input that is transcribed to a phonological form by means of the BAS services and computes PLD scores on the basis of these. By implication, PLD2flex can be used with any language that is supported by the BAS or for that phonological transcripts are provided. 
 
-## How to run the tool
+## Installation
+
+Easiest way to install the tool is to head over to the [releases](https://github.com/FelixTheodor/PLD2flex/releases), and download the file for your OS.
+Its a zip file that contains the binary as well as the needed folder structure. Unpack all of it to a destination of your choice and run the .exe / binary.
+(On Windows, you might also allow the execution in the Windows Defender Pop-Up).
+
+
+## How to run the tool from source
 
 **1. Install python3.12: https://www.python.org/downloads/**
 

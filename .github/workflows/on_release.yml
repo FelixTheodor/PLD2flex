@@ -1,0 +1,96 @@
+name: Build EXE on Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable
+        run: |
+          pyinstaller --onefile main.py --name PLD2flex
+
+      - name: Upload artifact (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PLD2flex-windows
+          path: dist/PLD2flex.exe
+
+      - name: Upload artifact (macOS)
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PLD2flex-macos
+          path: dist/PLD2flex
+
+      - name: Upload artifact (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PLD2flex-linux
+          path: dist/PLD2flex
+  
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        path: dist/PLD2flex/
+    
+    - name: Rename downloaded files
+      run: |
+        mkdir -p PLD2flex-linux/ PLD2flex-macos/ PLD2flex-windows/
+        
+        mv ./dist/PLD2flex/PLD2flex-linux/PLD2flex PLD2flex-linux/PLD2flex-linux
+        mv ./dist/PLD2flex/PLD2flex-macos/PLD2flex PLD2flex-macos/PLD2flex-macos
+        mv ./dist/PLD2flex/PLD2flex-windows/PLD2flex.exe PLD2flex-windows/PLD2flex-windows.exe
+        
+        cp -r ./data PLD2flex-linux/
+        cp config.txt PLD2flex-linux/
+        
+        cp -r ./data PLD2flex-macos/
+        cp config.txt PLD2flex-macos/
+        
+        cp -r ./data PLD2flex-windows/
+        cp config.txt PLD2flex-windows/
+
+        zip -r PLD2flex-linux.zip PLD2flex-linux/ 
+        zip -r PLD2flex-macos.zip PLD2flex-macos/ 
+        zip -r PLD2flex-windows.zip PLD2flex-windows/ 
+    
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          PLD2flex-linux.zip
+          PLD2flex-macos.zip
+          PLD2flex-windows.zip

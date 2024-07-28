@@ -5,7 +5,9 @@ import requests
 from PyQt5.QtWidgets import QApplication, QMainWindow # pylint: disable=no-name-in-module
 from PyQt5 import QtCore
 import time
-import playsound
+from pydub import AudioSegment
+from pydub.playback import play
+from pydub.exceptions import PydubException
 import numpy as np
 import copy
 
@@ -391,9 +393,11 @@ class ContentManager:
         play a bell sound when the current task is done
         """
         try:
-            playsound.playsound(f"data{SLASH}sounds{SLASH}bell.mp3")
-        except playsound.PlaysoundException:
-            print(playsound.PlaysoundException)
+            sound = AudioSegment.from_wav(f"data{SLASH}sounds{SLASH}bell.wav")
+            play(sound)
+        # numerous exceptions possible - since its not a must have feature, we just print the error and move on
+        except Exception as e:
+            print(e)
 
     def report_config(self):
         """

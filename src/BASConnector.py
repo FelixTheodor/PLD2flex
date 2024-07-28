@@ -1,6 +1,5 @@
 import io
 import requests
-import xml.etree.ElementTree as ET
 
 class BASConnector:
     """
@@ -26,8 +25,7 @@ class BASConnector:
         file = {'i': ('temp.txt', io.StringIO(orth))}
 
         request = requests.post(url=self.base_url, data=self.params, files=file)
-        root = ET.fromstring(request.text)
-        link = root.find("downloadLink").text
+        link = request.text.split("<downloadLink>")[1].split("</downloadLink>")[0]
         result = requests.get(link)
         result.encoding = "utf-8"
 
@@ -45,8 +43,7 @@ class BASConnector:
         file = {'i': ('temp.txt', io.StringIO(orths))}
 
         request = requests.post(url=self.base_url, data=self.params, files=file)
-        root = ET.fromstring(request.text)
-        link = root.find("downloadLink").text
+        link = request.text.split("<downloadLink>")[1].split("</downloadLink>")[0]
         result = requests.get(link)
         result.encoding = "utf-8"
 
