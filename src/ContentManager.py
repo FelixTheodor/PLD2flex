@@ -131,9 +131,9 @@ class ContentManager:
             phon_list = self.connector.get_phons_from_list(input_text)
         else: 
             path = input_text.replace(self.fileCheck, "").replace("\n", "")
-            self.protocol("comparing "+path+" to " + corpus_name + "\n")
+            self.protocol("comparing "+path.split(SLASH)[-1]+" to " + corpus_name + "\n")
             cd.input = "file"
-            cd.path_word = path
+            cd.path_word = path.split(SLASH)[-1]
             if os.path.isfile(path):
                 f = open(path)
                 for line in f.readlines():
@@ -262,7 +262,7 @@ class ContentManager:
         if path_provided:
             cd.input = "file"
             path = input_text.replace(self.fileCheck, "").replace("\n", "")
-            cd.path_word = path
+            cd.path_word = path.split(SLASH)[-1]
             if os.path.isfile(path): 
                 self.protocol("comparing columns in " + path.split(SLASH)[-1] +":\n")
                 f = open(path)
@@ -403,11 +403,11 @@ class ContentManager:
         """
         show the user the current configuration in the protocol field and the log file
         """
-        self.protocol(f"path to config: {self.config.path}")
+        self.protocol(f"path to config: {"/".join(self.config.path.split(SLASH)[-2:])}")
         self.protocol("---------------------------------------")
         self.protocol(f"current configuration:\ncorpora:\t{len(self.corpora)} initialized")
-        self.protocol(f"language:\t{self.config.lang}\nneighborus:\t{self.config.neighbours}")
-        self.protocol(f"results-path:\t{self.config.result_path}\nlogs-path:\t{self.config.log_path}")
+        self.protocol(f"language:\t{self.config.lang}\nneighbours:\t{self.config.neighbours}")
+        self.protocol(f"results-path:\t{"/".join(self.config.result_path.split("/")[-4:])}\nlogs-path:\t{"/".join(self.config.log_path.split("/")[-4:])}")
         self.protocol("---------------------------------------")
         self.log(f"configuration: {len(self.corpora)} corpora initialized, language: {self.config.lang}, neighbours: {self.config.neighbours}")
 
