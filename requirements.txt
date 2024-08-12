@@ -3,3 +3,4 @@ requests==2.32.3
 textdistance==4.6.3
 pydub==0.25.1
 PyQt5==5.15.11
+ffmpeg==1.4
