@@ -5,12 +5,12 @@ class BASConnector:
     """
     provides methods to call the BAS-API and convert orthographic WOs to phons
     """
-    def __init__(self, lang):
+    def __init__(self, lang, calc):
         self.base_url = "https://clarin.phonetik.uni-muenchen.de/BASWebServices/services/runG2P"
         self.ping_url = "https://clarin.phonetik.uni-muenchen.de/BASWebServices/services/getLoadIndicator"
         self.params = {"com": "no","align": "no","outsym": "sampa","stress": "no","lng": lang,"syl": "no",
                         "embed": "no","iform": "list","nrm": "no","oform": "tab","map": "no","featset": "standard"}
-    
+        self.calc = calc
     def ping(self):
         """
         checks the server load of the BAS
@@ -31,9 +31,11 @@ class BASConnector:
 
         for word in result.text.split("\n"):
             if ";" in word:
-                phon = word.split(";")[1].replace(" ", "")
+                if self.calc == "CHARACTER":
+                    phon = word.split(";")[1].replace(" ", "")
+                else:
+                    phon = word.split(";")[1].split(" ")
                 return phon
-
         return None
 
     def get_phons_from_list(self, orths):

@@ -26,7 +26,7 @@ class ContentManager:
 
         self.config = Config()
         self.PLD2flex = PLD2flex()
-        self.connector = BASConnector(self.config.lang)
+        self.connector = BASConnector(self.config.lang, self.config.calculation)
 
         self.corpora = {}
 
@@ -156,7 +156,7 @@ class ContentManager:
             else:
                 self.error("cannot read file: " + path, cd)
                 return
-        all_words = self.PLD2flex.read_corpus(phon_list.split("\n"))
+        all_words = self.PLD2flex.read_corpus(phon_list.split("\n"), self.config.calculation)
         all_levi = []
         for word in all_words:
             new_cd = CommandData()
@@ -212,7 +212,7 @@ class ContentManager:
             except requests.exceptions.RequestException:
                 self.error("connection to BAS refused", cd)
                 return
-        corpus = self.PLD2flex.read_corpus(phon_list.split("\n"))
+        corpus = self.PLD2flex.read_corpus(phon_list.split("\n"), self.config.calculation)
         cd.corpus = corpus
 
         if len(corpus) < self.config.neighbours:
@@ -228,7 +228,7 @@ class ContentManager:
 
     def cross_compare(self, cd):
         """
-        cross compare a two-cloum file or input list
+        cross compare a two-column file or input list
         """
         cd.method= "many-to-many"
         if len(cd.corpus) < self.config.neighbours + 1 :
@@ -385,7 +385,7 @@ class ContentManager:
             path = self.config.corpus_files[key]
             with open(path, encoding = "utf-8", mode = "r") as file:
                 content = file.read().split("\n")
-            corpus = self.PLD2flex.read_corpus(content)
+            corpus = self.PLD2flex.read_corpus(content, self.config.calculation)
             if corpus != None and len(corpus) != 0:
                 self.corpora[key] = corpus
             else:
@@ -413,10 +413,10 @@ class ContentManager:
         self.protocol(f"path to config: {SLASH.join(self.config.path.split(SLASH)[-2:])}")
         self.protocol("---------------------------------------")
         self.protocol(f"current configuration:\ncorpora:\t{len(self.corpora)} initialized")
-        self.protocol(f"language:\t{self.config.lang}\nneighbours:\t{self.config.neighbours}")
+        self.protocol(f"language:\t{self.config.lang}\nneighbours:\t{self.config.neighbours}\ncalculation:\t{self.config.calculation}")
         self.protocol(f"results-path:\t{SLASH.join(self.config.result_path.split(SLASH)[-4:])}\nlogs-path:\t{SLASH.join(self.config.log_path.split(SLASH)[-4:])}")
         self.protocol("---------------------------------------")
-        self.log(f"configuration: {len(self.corpora)} corpora initialized, language: {self.config.lang}, neighbours: {self.config.neighbours}")
+        self.log(f"configuration: {len(self.corpora)} corpora initialized, language: {self.config.lang}, neighbours: {self.config.neighbours}, calculation: {self.config.calculation}")
 
     def ping(self):
         """

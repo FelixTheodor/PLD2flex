@@ -15,9 +15,10 @@ class Config:
         self.result_path = os.getcwd() + f"{SLASH}data{SLASH}results{SLASH}"
         self.log_path = os.getcwd() + f"{SLASH}data{SLASH}logs{SLASH}"
         self.path = os.getcwd() + f"{SLASH}config.txt"
+        self.calculation = "CHARACTER"
         self.read_from_file()
         self.init_corpus_files()
-        
+
     def read_from_file(self):
         if not os.path.isfile(self.path):
             return
@@ -39,6 +40,8 @@ class Config:
                     self.result_path = val.replace(".", os.getcwd())
                 elif cat == "LOGS_PATH":
                     self.log_path = val.replace(".", os.getcwd())
+                elif cat == "CALC":
+                    self.calculation = val.strip()
         f.close()
     
     def init_corpus_files(self):
