@@ -10,7 +10,7 @@ c.read_from_file()
 c.init_corpus_files()
 
 p = PLD2flex()
-b = BASConnector(c.lang)
+b = BASConnector(c.lang, c.calculation)
 
 print("this script works with the same config file as the main program.")
 print("these are the current values:")
@@ -41,7 +41,7 @@ path = c.corpus_files[c_name]
 with open(path, encoding = "utf-8", mode = "r") as file:
     content = file.read().split("\n")
 
-corpus = p.read_corpus(content)
+corpus = p.read_corpus(content,c.calculation)
 if corpus != None and len(corpus) != 0:
     print("corpus initialized.")
 else:

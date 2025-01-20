@@ -88,7 +88,7 @@ class PLD2flex:
         return
 
     
-    def read_corpus(self, content):
+    def read_corpus(self, content, calc):
         """
         converts a content string by splitting on ';' to a list of WordObjects
         """
@@ -98,7 +98,10 @@ class PLD2flex:
                 if len(line.split(";")) != 2:
                     continue
                 orth = line.split(";")[0].replace(" ","")
-                phon = line.split(";")[1].replace(" ","")
+                if calc == "CHARACTER":
+                    phon = line.split(";")[1].replace(" ","")
+                else:
+                    phon = line.split(";")[1].split(" ")
                 if orth != None and phon != None:
                     wo = WordObject(orth, p=phon)
                     corpus.append(wo)
